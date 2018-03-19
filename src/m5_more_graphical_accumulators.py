@@ -131,7 +131,7 @@ def run_test_draw_circles_from_rectangle():
     print('--------------------------------------------------')
 
     # ------------------------------------------------------------------
-    # TODO: 3. Implement this TEST function.
+    # Done: 3. Implement this TEST function.
     #   It TESTS the  draw_circles_from_rectangle  function
     #   defined below.  Include at least **   3   ** tests, of which
     #      ***  at least TWO tests are on ONE window and
@@ -166,8 +166,6 @@ def run_test_draw_circles_from_rectangle():
     draw_circles_from_rectangle(12, 9, circle, window2)
 
     window2.close_on_mouse_click()
-
-
 
 
 def draw_circles_from_rectangle(m, n, rectangle, window):
@@ -210,7 +208,7 @@ def draw_circles_from_rectangle(m, n, rectangle, window):
       :type window: rg.RoseWindow
     """
     # ------------------------------------------------------------------
-    # TODO: 4. Implement and test this function.
+    # Done: 4. Implement and test this function.
     #          Tests have been written for you (above).
     #
     # CONSIDER using the ACCUMULATOR IN GRAPHICS pattern,
@@ -226,27 +224,27 @@ def draw_circles_from_rectangle(m, n, rectangle, window):
 
     rectangle.attach_to(window)
 
-    centerpoint = rg.Point((rectangle.corner_2.x - rectangle.corner_1.x) / 2, (rectangle.corner_2.y - rectangle.corner_1.y) / 2)
+    centerpoint = rectangle.get_center()
+    centerpoint = rg.Point(centerpoint.x - rectangle.get_width() / 2 + rectangle.get_height() / 2, centerpoint.y)
 
     for k in range(m):
-        centerpoint = rg.Point(centerpoint.x - rectangle.get_width() / 2 - rectangle.get_height() / 2 - (k) * rectangle.get_height(), centerpoint.y)
+        centerpoint = rg.Point(centerpoint.x - rectangle.get_height(), centerpoint.y)
         radius = rectangle.get_height() / 2
-        derF = rg.Circle(centerpoint , radius)
-        derF.fill_color = rectangle.fill_color
-        derF.attach_to(window)
+        derf = rg.Circle(centerpoint, radius)
+        derf.fill_color = rectangle.fill_color
+        derf.attach_to(window)
 
-        centerpoint = rg.Point((rectangle.corner_2.x - rectangle.corner_1.x) / 2, (rectangle.corner_2.y - rectangle.corner_1.y) / 2)
+    centerpoint = rectangle.get_center()
+    centerpoint = rg.Point(centerpoint.x, centerpoint.y - rectangle.get_height() / 2 + rectangle.get_width() / 2)
 
     window.render()
 
     for f in range(n):
-        centerpoint = rg.Point(centerpoint.x, centerpoint.y - rectangle.get_height() / 2 - rectangle.get_width() / 2 - (f + 1) * rectangle.get_width())
+        centerpoint = rg.Point(centerpoint.x, centerpoint.y - rectangle.get_width())
         radius = rectangle.get_width() / 2
-        derF = rg.Circle(centerpoint, radius)
-        derF.outline_color = rectangle.outline_color
-        derF.attach_to(window)
-        print('waka')
-
+        derf = rg.Circle(centerpoint, radius)
+        derf.outline_color = rectangle.outline_color
+        derf.attach_to(window)
 
     window.render()
 
@@ -328,7 +326,7 @@ def draw_lines_from_rectangles(rectangle1, rectangle2, n, window):
       :type window: rg.RoseWindow
       """
     # ------------------------------------------------------------------
-    # TODO: 5. Implement and test this function.
+    # Done: 5. Implement and test this function.
     #          Tests have been written for you (above).
     #
     # CONSIDER using the ACCUMULATOR IN GRAPHICS pattern,
@@ -341,6 +339,30 @@ def draw_lines_from_rectangles(rectangle1, rectangle2, n, window):
     #          ** FIRST DO A CONCRETE EXAMPLE BY HAND! **
     ####################################################################
     # ------------------------------------------------------------------
+
+    rectangle1.attach_to(window)
+    rectangle2.attach_to(window)
+
+    first = rg.Line(rectangle1.get_center(), rectangle2.get_center())
+    first.color = rectangle1.outline_color
+    first.thickness = 5
+    first.attach_to(window)
+
+    xdiff = rectangle1.get_center().x - rectangle1.get_lower_left_corner().x
+    ydiff = rectangle1.get_center().y - rectangle1.get_lower_left_corner().y
+
+    for k in range(n-1):
+        point1 = rg.Point(rectangle1.get_center().x - (k + 1) * xdiff, rectangle1.get_center().y - (k + 1) * ydiff)
+        point2 = rg.Point(rectangle2.get_center().x - (k + 1) * xdiff, rectangle2.get_center().y - (k + 1) * ydiff)
+        linus = rg.Line(point1, point2)
+        linus.thickness = 5
+        if k % 2 == 0:
+            linus.color = rectangle2.outline_color
+        else:
+            linus.color = rectangle1.outline_color
+        linus.attach_to(window)
+
+    window.render()
 
 
 # ----------------------------------------------------------------------
